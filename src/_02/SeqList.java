@@ -1,6 +1,9 @@
 package _02;
 
+import javax.naming.OperationNotSupportedException;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * @author Zcc
@@ -75,7 +78,7 @@ public class SeqList<T> implements Iterable<T> {
     }
 
     public int insert(int i, T x) {
-        if (x != null) {
+        if (x != null && i < this.n) {
             i = Math.max(0, i);
             Object[] source = this.elements;
             if (this.n == this.elements.length) {
@@ -231,39 +234,103 @@ public class SeqList<T> implements Iterable<T> {
         return true;
     }
 
+    //顺序表追加一个顺序表
     public void addAll(SeqList<T> seqList) {
-
+        for (int i = 0; i < seqList.size(); i++) {
+            this.insert(seqList.get(i));
+        }
     }
 
+    //指定index插入一个数据
     public void insertAll(int i, SeqList<T> seqList) {
-
+        for (int j = 0; j < seqList.n; j++) {
+            this.insert(i, seqList.get(j));
+        }
     }
 
-    public void unionAll(SeqList<T> seqList) {
 
+    public SeqList<T> unionAll(SeqList<T> seqList) {
+        SeqList<T> list = new SeqList<>(this, 2);
+        list.addAll(seqList);
+        return list;
     }
 
-    public void retainAll(SeqList<T> seqList) {
 
-    }
-
-    public void containsAll(SeqList<T> seqList) {
-
+    public boolean containsAll(SeqList<T> seqList) {
+        for (int i = 0; i < seqList.n; i++) {
+            if (!this.contains(seqList.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void removeAll(SeqList<T> seqList) {
+        for (int i = 0; i < seqList.n; i++) {
+            this.removeAll(seqList.get(i));
+        }
+    }
 
+    //合并，去重
+    public SeqList<T> retainAll(SeqList<T> seqList) {
+        SeqList<T> ts = this.unionAll(seqList);
+        SeqList<T> list = new SeqList<>(ts.n);
+        for (int i = 0; i < ts.n; i++) {
+            list.insertDifferent(ts.get(i));
+        }
+        return list;
     }
 
 
-
     public SeqList<T> sublist(int begin, int end) {
-        return null;
+        begin = Math.max(0, begin);
+        end = Math.min(end, this.n);
+        SeqList<T> seqList = new SeqList<T>(Math.abs(end - begin));
+        for (int i = begin; i < end; i++) {
+            seqList.insert(this.get(i));
+        }
+        return seqList;
     }
 
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new SeqIterator();
+    }
+
+    private class SeqIterator implements Iterator<T> {
+
+        int index = -1; //当前元素.当前迭代器指向的元素
+        int succ = 0; //后继元素.next指向的元素
+
+
+        @Override
+        public boolean hasNext() {
+            return this.succ != SeqList.this.n;
+        }
+
+        @Override
+        public T next() {
+            T t = SeqList.this.get(succ);
+            if (t != null) {
+                this.index = this.succ++;//往后移动
+                return t;
+            }
+            throw new NoSuchElementException();
+        }
+
+        @Override
+        public void remove() {
+            if (this.index >= 0 && this.index < SeqList.this.n) {
+                SeqList.this.remove(this.index);
+                if (this.succ > 0) {
+                    this.succ--;
+                }
+                this.index = -1;//不可以连续删除
+            } else {
+                throw new NoSuchElementException();
+            }
+
+        }
     }
 }
