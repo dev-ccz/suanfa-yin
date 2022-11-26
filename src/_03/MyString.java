@@ -181,4 +181,66 @@ public class MyString implements Comparable<MyString>, Serializable {
     }
 
 
+    public static int indexOf(String src, String pattern) {
+        int m = src.length();
+        int n = pattern.length();
+        if (m < n) return -1;
+        int i = 0, j = 0;
+        while (i < m && j < n) {
+            if (src.indexOf(i) == pattern.indexOf(j)) {
+                i++;
+                j++;
+            } else {
+                i = i - j + 1;
+                j = 0;
+                if (n + i > m) {
+                    return -1;
+                }
+            }
+        }
+        if (j == n) {
+            return i - j;
+        }
+        return -1;
+    }
+
+
+    public static int[] getNext(String pattern) {
+        char[] p = pattern.toCharArray();
+        int j = 0, k = -1;
+        int[] next = new int[pattern.length()];
+        next[0] = -1;
+        while (j < pattern.length() - 1) {
+            if (k == -1 || p[j] == p[k]) {
+                next[++j] = ++k;
+            } else {
+                k = next[k];
+            }
+        }
+        return next;
+    }
+
+    public static int search(String str, String pattern) {
+        if (pattern.length() == 0 || pattern.length() > str.length()) return -1;
+        int[] next = getNext(pattern);
+        char[] strChars = str.toCharArray();
+        char[] paChars = pattern.toCharArray();
+        int i = 0, j = 0;
+        while (i < str.length() && j < pattern.length()) {
+            if (j == -1 || strChars[i] == paChars[j]) {
+                //j=-1时，要移动的是i，当但j也要归0
+                ++j;
+                ++i;
+            } else {
+                //i不需要回溯了，j回到指定位置
+                j = next[j];
+            }
+        }
+        if (j >= pattern.length()) {
+            return i - j;
+        }
+        return -1;
+    }
+
+
 }
