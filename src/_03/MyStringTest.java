@@ -39,7 +39,7 @@ public class MyStringTest {
         String s = Integer.toString(10, 2);
         System.out.println(s);
         System.out.println(Integer.toBinaryString(10));
-        System.out.println(Arrays.toString(MyString.getNext("abacdxbcababc")));
+        System.out.println(Arrays.toString(MyString.getNext("abaabcac")));
         System.out.println(MyString.search("abacbchdi", "di"));
 
     }
