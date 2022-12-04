@@ -13,7 +13,7 @@ public class MyStringTest {
         MyString myString2 = new MyString("1234567890".toCharArray());
         MyString myString3 = new MyString(myString2);
         System.out.println(myString3.subString(7));
-        System.out.println(myString3.subString(2,7));
+        System.out.println(myString3.subString(2, 7));
         System.out.println(myString3.contact(new MyString("zhangchangchun")));
         System.out.println(myString3.charAt(7));
         System.out.println(myString3.contact(null));
@@ -29,8 +29,8 @@ public class MyStringTest {
         MyString all = myString4.replaceAll(new MyString("a"), new MyString("xxxxx"));
         System.out.println(replaceFirst);
         System.out.println(all);
-        System.out.println(StringUtils.indexOf("aaaaxxx","ax"));
-        String a= """
+        System.out.println(StringUtils.indexOf("aaaaxxx", "ax"));
+        String a = """
                 aaaaxxx
                 """;
         System.out.println(a);
@@ -41,6 +41,8 @@ public class MyStringTest {
         System.out.println(Integer.toBinaryString(10));
         System.out.println(Arrays.toString(MyString.getNext("abaabcac")));
         System.out.println(MyString.search("abacbchdi", "di"));
+
+        System.out.println(StringUtils.index("1234567890","abcd"));
 
     }
 }
