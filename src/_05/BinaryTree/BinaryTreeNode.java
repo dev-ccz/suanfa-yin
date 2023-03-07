@@ -1,0 +1,22 @@
+package _05.BinaryTree;
+
+public class BinaryTreeNode <T>{//?????????
+	public T data;//??????
+	public BinaryTreeNode <T>left,right;//??????????
+	public BinaryTreeNode(T data, BinaryTreeNode <T>left, BinaryTreeNode <T>right ) {
+		this.data=data;
+		this.left=left;
+		this.right=right;//??????
+	}
+	
+	public BinaryTreeNode(T data ) {
+		this(data,null,null);//???????
+	}
+	public String toString() {
+		return this.data.toString();//????????
+	}
+	public  boolean isLeaf() { //??к?????
+		return this.left==null&& this.right==null;
+	}
+	
+}
